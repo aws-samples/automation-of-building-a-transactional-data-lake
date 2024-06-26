@@ -1,0 +1,134 @@
+/*
+
+# Step 0. Create external tables from AWS Glue Data Catalog database
+CREATE EXTERNAL SCHEMA game_delta
+from data catalog
+database 'game_delta' -- AWS Glue Data Catalog Database having symlink manifest files
+iam_role 'arn:aws:iam::279067972884:role/service-role/AmazonRedshift-CommandsAccessRole-20230711T083642'
+
+# Step 1. Create a table for Redshift ML
+##Redshift Version
+CREATE VIEW redshift_game_delta.partial_user_data AS
+SELECT
+    user_id,
+    gender,
+    DATEDIFF(YEAR, dob, CURRENT_DATE) AS age,
+    cur_level,
+    marketing_agreement,
+    first_login,
+    DATEDIFF(DAY, first_login, last_login) AS account_length,
+    CASE WHEN DATEDIFF(DAY, first_login, last_login) > 14 THEN 'True' ELSE 'False' END AS churn
+FROM glue_game_delta.user_data
+WITH NO SCHEMA BINDING;
+
+
+
+##Redshift Version
+CREATE VIEW redshift_game_delta.purchase_activity AS
+SELECT user_id,
+    COUNT(*) AS total_purchase_transactions, 
+    SUM(num_item_purchased) AS total_purchased_items
+FROM glue_game_delta.purchase_data
+GROUP BY user_id
+WITH NO SCHEMA BINDING;
+
+
+
+##Redshift Version
+CREATE VIEW redshift_game_delta.game_play_activity AS
+SELECT
+    user_id,
+    SUM(CASE WHEN device = 'pc' THEN time_spent ELSE 0 END) AS total_time_in_pc,
+    SUM(CASE WHEN device = 'mobile' THEN time_spent ELSE 0 END) AS total_time_in_mobile,
+    SUM(CASE WHEN device = 'pc' THEN MultiPoints ELSE 0 END) AS total_points_in_pc,
+    SUM(CASE WHEN device = 'mobile' THEN MultiPoints ELSE 0 END) AS ttotal_points_in_mobile,
+    SUM(CASE WHEN device = 'pc' THEN got_target ELSE 0 END) AS total_targets_in_pc,
+    SUM(CASE WHEN device = 'mobile' THEN got_target ELSE 0 END) AS total_targets_in_mobile
+FROM glue_game_delta.play_data
+GROUP BY user_id
+WITH NO SCHEMA BINDING;
+
+
+
+##Redshift Version
+CREATE TABLE player_activity AS
+SELECT
+    redshift_game_delta.partial_user_data.user_id,
+    redshift_game_delta.partial_user_data.age,
+    redshift_game_delta.partial_user_data.gender,
+    redshift_game_delta.partial_user_data.cur_level,
+    redshift_game_delta.partial_user_data.marketing_agreement,
+    redshift_game_delta.partial_user_data.first_login,
+    redshift_game_delta.partial_user_data.account_length,
+    redshift_game_delta.partial_user_data.churn,
+    redshift_game_delta.purchase_activity.total_purchase_transactions,
+    redshift_game_delta.purchase_activity.total_purchased_items,
+    redshift_game_delta.game_play_activity.total_time_in_pc,
+    redshift_game_delta.game_play_activity.total_time_in_mobile,
+    redshift_game_delta.game_play_activity.total_points_in_pc,
+    redshift_game_delta.game_play_activity.total_points_in_mobile,
+    redshift_game_delta.game_play_activity.total_targets_in_pc,
+    redshift_game_delta.game_play_activity.total_targets_in_mobile
+FROM redshift_game_delta.partial_user_data, redshift_game_delta.purchase_activity, redshift_game_delta.game_play_activity
+WHERE redshift_game_delta.partial_user_data.user_id = redshift_game_delta.purchase_activity.user_id AND redshift_game_delta.purchase_activity.user_id = redshift_game_delta.game_play_activity.user_id
+
+*/
+
+/*
+# Step 2. Create the machine learning model
+CREATE MODEL player_churn_auto_model7
+FROM
+    (
+      SELECT age,
+             gender,
+             cur_level,
+             marketing_agreement,
+             account_length,
+             total_purchase_transactions/account_length AS average_daily_purchase_transactions,
+             total_purchased_items/account_length AS average_daily_purchased_items,
+             total_time_in_mobile/account_length AS average_daily_playing_in_mobile,
+             total_time_in_pc/account_length AS average_daily_playing_in_pc,
+             total_points_in_mobile/account_length AS average_daily_points_in_mobile,
+             total_points_in_pc/account_length AS average_daily_points_in_pc,
+             total_targets_in_mobile/account_length AS average_daily_targets_in_mobile,
+             total_targets_in_pc/account_length AS average_daily_targets_in_pc,
+             churn
+      FROM player_activity
+      WHERE  first_login > '2023-03-03' AND first_login < '2023-05-31'
+     )
+TARGET churn 
+FUNCTION ml_fn_player_churn_auto7
+IAM_ROLE default 
+SETTINGS (
+  S3_BUCKET 'redshift-ml-bucket-20230831')
+*/
+
+/*
+# Step 3. Check the status of model training (optional)
+SHOW MODEL player_churn_auto_model7;
+*/
+
+/*
+# Step 4. Perform predictions with the model
+SELECT
+    user_id,
+    ml_fn_player_churn_auto7(
+        age,
+        gender,
+        cur_level,
+        marketing_agreement,
+        account_length,
+        total_purchase_transactions/account_length,
+        total_purchased_items/account_length,
+        total_time_in_mobile/account_length,
+        total_time_in_pc/account_length,
+        total_points_in_mobile/account_length,
+        total_points_in_pc/account_length,
+        total_targets_in_mobile/account_length,
+        total_targets_in_pc/account_length
+    ) AS active
+FROM
+    player_activity
+WHERE
+    first_login >= '2023-07-31';
+*/

@@ -1,0 +1,97 @@
+{
+  "app": "python3 app.py",
+  "watch": {
+    "include": [
+      "**"
+    ],
+    "exclude": [
+      "README.md",
+      "cdk*.json",
+      "requirements*.txt",
+      "source.bat",
+      "**/__init__.py",
+      "python/__pycache__",
+      "tests"
+    ]
+  },
+  "context": {
+    "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
+    "@aws-cdk/core:checkSecretUsage": true,
+    "@aws-cdk/core:target-partitions": [
+      "aws",
+      "aws-cn"
+    ],
+    "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
+    "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": true,
+    "@aws-cdk/aws-ecs:arnFormatIncludesClusterName": true,
+    "@aws-cdk/aws-iam:minimizePolicies": true,
+    "@aws-cdk/core:validateSnapshotRemovalPolicy": true,
+    "@aws-cdk/aws-codepipeline:crossAccountKeyAliasStackSafeResourceName": true,
+    "@aws-cdk/aws-s3:createDefaultLoggingPolicy": true,
+    "@aws-cdk/aws-sns-subscriptions:restrictSqsDescryption": true,
+    "@aws-cdk/aws-apigateway:disableCloudWatchRole": true,
+    "@aws-cdk/core:enablePartitionLiterals": true,
+    "@aws-cdk/aws-events:eventsTargetQueueSameAccount": true,
+    "@aws-cdk/aws-iam:standardizedServicePrincipals": true,
+    "@aws-cdk/aws-ecs:disableExplicitDeploymentControllerForCircuitBreaker": true,
+    "@aws-cdk/aws-iam:importedRoleStackSafeDefaultPolicyName": true,
+    "@aws-cdk/aws-s3:serverAccessLogsUseBucketPolicy": true,
+    "@aws-cdk/aws-route53-patters:useCertificate": true,
+    "@aws-cdk/customresources:installLatestAwsSdkDefault": false,
+    "@aws-cdk/aws-rds:databaseProxyUniqueResourceName": true,
+    "@aws-cdk/aws-codedeploy:removeAlarmsFromDeploymentGroup": true,
+    "@aws-cdk/aws-apigateway:authorizerChangeDeploymentLogicalId": true,
+    "@aws-cdk/aws-ec2:launchTemplateDefaultUserData": true,
+    "@aws-cdk/aws-secretsmanager:useAttachedSecretResourcePolicyForSecretTargetAttachments": true,
+    "@aws-cdk/aws-redshift:columnId": true,
+    "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true,
+    "@aws-cdk/aws-ec2:restrictDefaultSecurityGroup": true,
+    "@aws-cdk/aws-apigateway:requestValidatorUniqueId": true,
+    "@aws-cdk/aws-kms:aliasNameRef": true,
+    "@aws-cdk/aws-autoscaling:generateLaunchTemplateInsteadOfLaunchConfig": true,
+    "@aws-cdk/core:includePrefixInUniqueNameGeneration": true,
+    "@aws-cdk/aws-opensearchservice:enableOpensearchMultiAzWithStandby": true,
+    "vpc_name": "default",
+    "initial_glue_job_name": "initial-glue-etl-job",
+    "cdc_glue_job_name": "cdc-glue-etl-job",
+    "glue_assets_bucket_name": "aws-glue-assets-891376935319",
+    "raw_data_lake_bucket_name": "raw-data-lake-891376935319",
+    "transactional_data_lake_bucket_name": "transactional-data-lake-891376935319",
+    "database": "game",
+    "target_tables_list": [
+      {
+        "table_name": "user_data",
+        "primary_key": "user_id",
+        "partition_key": "None",
+        "precombine_key": "None"
+      },
+      {
+        "table_name": "item_data",
+        "primary_key": "item_id",
+        "partition_key": "category",
+        "precombine_key": "None"
+      },
+      {
+        "table_name": "play_data",
+        "primary_key": "play_id",
+        "partition_key": "None",
+        "precombine_key": "None"
+      },
+      {
+        "table_name": "purchase_data",
+        "primary_key": "purchase_id",
+        "partition_key": "None",
+        "precombine_key": "None"
+      }
+    ],
+    "open_table_format": "delta",
+    "glue_trigger_for_cdc_etl_name": "glue_trigger_for_delta_cdc_etl",
+    "schedule_of_glue_trigger_for_cdc_etl": "cron(10 * * * ? *)",
+    "delta_glue_database_for_manifest_name": "game_manifest",
+    "delta_native_table_glue_crawler_name": "glue_crawler_for_delta_native_table",
+    "delta_symlink_manifest_glue_crawler_name": "glue_crawler_for_delta_manifest_table",
+    "delta_glue_trigger_for_initial_etl_name": "glue_trigger_for_initial_load",
+    "delta_glue_trigger_for_native_table_crawler_name": "glue_trigger_for_native_crawler",
+    "delta_glue_trigger_for_symlink_manifest_crawler_name": "glue_trigger_for_manifest_crawler"
+  }
+}
