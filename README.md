@@ -1,11 +1,9 @@
 ## Automation of Building a Transactional Data Lake
-1. Introduction
-2. Guide Overview
-3. How to Run
-4. Reference Link
+1. [Introduction](https://github.com/aws-samples/automation-of-building-a-transactional-data-lake/tree/main?tab=readme-ov-file#introduction)
+2. [Guide Overview](https://github.com/aws-samples/automation-of-building-a-transactional-data-lake/tree/main?tab=readme-ov-file#guide-overview)
+3. [How to Run](https://github.com/aws-samples/automation-of-building-a-transactional-data-lake/tree/main?tab=readme-ov-file#how-to-run)
+4. [Reference Link](https://github.com/aws-samples/automation-of-building-a-transactional-data-lake/tree/main?tab=readme-ov-file#reference-link)
 <br>
-
-<div>
 
 ## Introduction
 This guide provides a simple and deployable use case for automating the process of building a transactional data lake on the AWS environment. With this guide, you will configure the parameters of AWS Glue, including choosing an open table format among Apache Hudi, Apache Iceberg, and Delta Lake. Once the parameters are configured, you will deploy this guide on your AWS environment and initiate the automated process of building a transactional data lake using the chosen open table format.
@@ -73,6 +71,7 @@ This guide will set up the following resources when you choose **Delta Lake**:
 |Glue Data Catalog(2)|Metastore for symlink-based manifest table definition|
 |Glue Crawler(1)|Classifier for creating table definition in Glue Data Catalog(1) after Glue ETL Job(1) is complete|
 |Glue Crawler(2)|Classifier for creating symlink-based manifest table definition in Glue Data Catalog(1) after Glue ETL Job(1) is complete|
+<br>
 
 ## How to Run
 Now you will provision the cloud infrastructures using the AWS Cloud Development Kit (AWS CDK).
@@ -169,14 +168,11 @@ To verify that the guide is working correctly, you can perform the following act
 
 - **Amazon Redshift**: Run queries in Amazon Redshift to read and validate the table data.
 ![Redshift](images/aws_console_redshift.png)
-
-<br>
 <br>
 
 ## Reference Link
 [1] [Choosing an open table format for your transactional data lake](https://aws.amazon.com/blogs/big-data/choosing-an-open-table-format-for-your-transactional-data-lake-on-aws/)
 </div>
-
 
 
 ## Security
