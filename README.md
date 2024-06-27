@@ -1,8 +1,8 @@
 ## Automation of Building a Transactional Data Lake
-1. [Introduction](https://gitlab.aws.dev/jiyukim/automation-of-building-a-transactional-data-lake/-/blob/develop/README.md#introduction)
-2. [Guide Overview](https://gitlab.aws.dev/jiyukim/automation-of-building-a-transactional-data-lake/-/blob/develop/README.md#guide-overview)
-3. [How to Run](https://gitlab.aws.dev/jiyukim/automation-of-building-a-transactional-data-lake/-/blob/develop/README.md#how-to-run)
-4. [Reference Link](https://gitlab.aws.dev/jiyukim/automation-of-building-a-transactional-data-lake/-/blob/develop/README.md#reference-link)
+1. Introduction
+2. Guide Overview
+3. How to Run
+4. Reference Link
 <br>
 
 <div>
