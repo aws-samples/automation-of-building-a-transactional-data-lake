@@ -79,7 +79,7 @@ Now you will provision the cloud infrastructures using the AWS Cloud Development
 #### 1. Clone repository and install Python dependencies
 Open your terminal, and run the following commands in the specified order:
 ```
-git clone
+git clone https://github.com/aws-samples/automation-of-building-a-transactional-data-lake.git
 
 cd automation-of-building-a-transactional-data-lake
 
